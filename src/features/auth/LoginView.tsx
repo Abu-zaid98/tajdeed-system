@@ -178,7 +178,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
           <span className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
             <MessageCircle className="w-4 h-4" />
           </span>
-        </a>س
+        </a>
       </div>
     </div>
   );
