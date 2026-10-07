@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Wifi, Lock, Mail, Eye, EyeOff, LogIn, AlertCircle, ShieldCheck, MonitorSmartphone } from 'lucide-react';
+import { Wifi, Lock, Mail, Eye, EyeOff, LogIn, AlertCircle, ShieldCheck, MonitorSmartphone, MessageCircle } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { useAppStore } from '../../lib/store';
@@ -152,15 +152,33 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
             >
               <span className="flex items-center gap-2">
                 <LogIn className="w-4 h-4" />
-                تسجيل الدخول للمنظومة
+                تسجيل الدخول للنظام
               </span>
             </Button>
           </form>
         </div>
 
         <p className="text-center text-[11px] text-slate-400">
-          حسابات المشرفين والمدراء يتم إنشاؤها وإدارتها من قبل الإدارة العليا
+          حسابات المشرفين والمدراء يتم إنشاؤها وإدارتها من قبل الإدارة
         </p>
+        <a
+          href="https://wa.me/972592133357"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="تواصل واتساب مع المطور"
+          className="flex items-center gap-3 p-3 rounded-2xl glass hover:border-emerald-500/40 transition-all group text-start"
+        >
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center font-black text-sm shadow-md shadow-emerald-500/25 shrink-0">
+            م
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-xs font-bold text-slate-900 dark:text-white">م. محمد الجوجو</div>
+            <div className="text-[11px] text-slate-400">تطوير ودعم المنظومة — اضغط للتواصل واتساب</div>
+          </div>
+          <span className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+            <MessageCircle className="w-4 h-4" />
+          </span>
+        </a>
       </div>
     </div>
   );

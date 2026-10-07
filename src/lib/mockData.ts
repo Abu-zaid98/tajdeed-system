@@ -21,7 +21,7 @@ export const initialSettings: Settings = {
 export const initialAdmins: Admin[] = [
   {
     id: 'admin-owner-main',
-    name: 'المهندس محمد (المدير العام)',
+    name: '(المدير العام)',
     email: 'admin@tajdeed.com',
     role: 'admin',
     active: true,
@@ -37,7 +37,7 @@ export const initialAuditLogs: AuditLog[] = [
   {
     id: 'audit-init-1',
     uid: 'admin-owner-main',
-    userName: 'المهندس محمد (المدير العام)',
+    userName: '(المدير العام)',
     action: 'تهيئة منظومة تجديد وربط قاعدة البيانات السحابية',
     entity: 'settings',
     entityId: 'main',

@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useRef } from 'react';
-import type { 
-  Admin, 
-  Settings, 
-  Subscriber, 
-  Subscription, 
-  Payment, 
-  AuditLog, 
+import type {
+  Admin,
+  Settings,
+  Subscriber,
+  Subscription,
+  Payment,
+  AuditLog,
   BackupMeta,
   SubscriberWithDetails,
   PlanType,
@@ -14,34 +14,34 @@ import type {
   ModeratorPermission
 } from '../types';
 import { ALL_MODERATOR_PERMISSIONS } from '../types';
-import { 
-  initialSettings, 
-  initialAdmins, 
-  initialSubscribers, 
-  initialSubscriptions, 
-  initialPayments, 
-  initialAuditLogs 
+import {
+  initialSettings,
+  initialAdmins,
+  initialSubscribers,
+  initialSubscriptions,
+  initialPayments,
+  initialAuditLogs
 } from './mockData';
 import { computeSubscriptionStatus, resolveCycleDates } from './dates';
 import { downloadJsonFile, splitStringToByteChunks, stableStringify, computePlanChangeBalance, applyCreditToCharge } from './utils';
 import { auth, db, getSecondaryAuth } from './firebase';
-import { 
-  collection, 
-  doc, 
-  setDoc, 
+import {
+  collection,
+  doc,
+  setDoc,
   getDoc,
   getDocs,
   deleteDoc,
-  onSnapshot, 
-  query, 
+  onSnapshot,
+  query,
   orderBy,
   limit,
   runTransaction
 } from 'firebase/firestore';
-import { 
-  signInWithEmailAndPassword, 
-  signOut, 
-  onAuthStateChanged, 
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
   createUserWithEmailAndPassword,
   setPersistence,
   browserLocalPersistence,
@@ -400,7 +400,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const [authLoading, setAuthLoading] = useState<boolean>(true);
 
-  // Current Admin / Moderator (primary identity)
+  // Current Admin / Moderator (primary identity).
+  // Starts as null (signed out) until proven: a stored profile, a valid
+  // auth session, or an explicit login. Never fall back to a default admin —
+  // that would grant access without authentication (e.g. fresh offline browser).
   const [currentAdmin, setCurrentAdmin] = useState<Admin | null>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.CURRENT_ADMIN);
     if (saved) {
@@ -413,7 +416,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         return null;
       }
     }
-    return initialAdmins[0] || null;
+    return null;
   });
 
   // Sync auth session with admin/moderator profile
@@ -709,7 +712,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
       const cred = await signInWithEmailAndPassword(auth, email.trim(), password);
       const uid = cred.user.uid;
-      
+
       if (db) {
         const snap = await getDoc(doc(db, 'admins', uid));
         if (snap.exists()) {
@@ -1097,7 +1100,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       });
       const { startDate, endDate } = resolved;
       const duration = resolved.durationDays;
-      
+
       const paid = initialSubCycle.paidAmount || 0;
       let payStatus: PayStatus = 'unpaid';
       if (paid >= price) payStatus = 'paid';
@@ -1250,7 +1253,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     // Remove subscriber from state
     setSubscribers(prev => prev.filter(s => s.id !== id));
-    
+
     // Also remove their subscriptions & payments from state
     const cyclesToDelete = subscriptions.filter(s => s.subscriberId === id);
     const paymentsToDelete = payments.filter(p => p.subscriberId === id);
@@ -1860,7 +1863,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       {
         id: `audit-${Date.now()}`,
         uid: currentAdmin?.id || 'admin-owner-main',
-        userName: currentAdmin?.name || 'المهندس محمد (المدير العام)',
+        userName: currentAdmin?.name || '(المدير العام)',
         action: 'تهيئة قاعدة البيانات بحالة نظيفة خالية من البيانات المؤقتة',
         entity: 'settings',
         entityId: 'main',
