@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { 
-  Wifi, 
-  Layers, 
-  CreditCard, 
-  ShieldCheck, 
-  Settings as SettingsIcon, 
-  Search, 
-  Plus, 
-  LogOut, 
-  Sun, 
-  Moon, 
-  WifiOff, 
-  Download, 
-  Menu, 
+import {
+  Wifi,
+  Layers,
+  CreditCard,
+  ShieldCheck,
+  Settings as SettingsIcon,
+  Search,
+  Plus,
+  LogOut,
+  Sun,
+  Moon,
+  WifiOff,
+  Download,
+  Menu,
   X,
   Share2,
   CalendarDays,
@@ -115,11 +115,10 @@ export const Layout: React.FC<LayoutProps> = ({
               <button
                 key={item.id}
                 onClick={() => onTabChange(item.id)}
-                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
-                  isActive
-                    ? 'bg-brand-500 text-white shadow-md shadow-brand-500/30'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/[0.06] hover:text-slate-900 dark:hover:text-white'
-                }`}
+                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 ${isActive
+                  ? 'bg-brand-500 text-white shadow-md shadow-brand-500/30'
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/[0.06] hover:text-slate-900 dark:hover:text-white'
+                  }`}
               >
                 <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-slate-400 dark:text-slate-500'}`} />
                 <span>{item.label}</span>
@@ -163,7 +162,7 @@ export const Layout: React.FC<LayoutProps> = ({
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-[11px] font-bold text-slate-700 dark:text-slate-200 truncate">م. محمد الجوجو</div>
-              <div className="text-[10px] text-slate-400">تطوير ودعم المنظومة</div>
+              <div className="text-[10px] text-slate-400">تطوير ودعم النظام</div>
             </div>
             <span className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
               <MessageCircle className="w-3.5 h-3.5" />
@@ -271,11 +270,10 @@ export const Layout: React.FC<LayoutProps> = ({
               <button
                 key={item.id}
                 onClick={() => onTabChange(item.id)}
-                className={`flex flex-col items-center justify-center py-1.5 px-3 rounded-xl transition-all min-w-[52px] ${
-                  isActive
-                    ? 'text-brand-500'
-                    : 'text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-200'
-                }`}
+                className={`flex flex-col items-center justify-center py-1.5 px-3 rounded-xl transition-all min-w-[52px] ${isActive
+                  ? 'text-brand-500'
+                  : 'text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-200'
+                  }`}
               >
                 <Icon className={`w-5 h-5 mb-0.5 ${isActive ? 'text-brand-500' : ''}`} />
                 <span className="text-[9px] font-semibold">{item.label}</span>
@@ -290,7 +288,7 @@ export const Layout: React.FC<LayoutProps> = ({
         isOpen={showLogoutConfirm}
         onClose={() => setShowLogoutConfirm(false)}
         variant="danger"
-        title="تسجيل الخروج من المنظومة"
+        title="تسجيل الخروج من النظام"
         message="هل أنت متأكد من رغبتك في تسجيل الخروج وإنهاء جلسة العمل الحالية؟"
         confirmText="تسجيل الخروج"
         cancelText="البقاء مسجلاً"

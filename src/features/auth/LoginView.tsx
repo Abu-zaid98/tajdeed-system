@@ -173,12 +173,12 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-xs font-bold text-slate-900 dark:text-white">م. محمد الجوجو</div>
-            <div className="text-[11px] text-slate-400">تطوير ودعم المنظومة — اضغط للتواصل واتساب</div>
+            <div className="text-[11px] text-slate-400">تطوير ودعم النظام — اضغط للتواصل واتساب</div>
           </div>
           <span className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
             <MessageCircle className="w-4 h-4" />
           </span>
-        </a>
+        </a>س
       </div>
     </div>
   );

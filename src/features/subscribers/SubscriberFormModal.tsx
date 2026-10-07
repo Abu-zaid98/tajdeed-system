@@ -117,8 +117,8 @@ export const SubscriberFormModal: React.FC<SubscriberFormModalProps> = ({
       : [];
     const nameDupes = nameNorm
       ? subscribers.filter(s =>
-          inScope(s) && !phoneDupes.some(p => p.id === s.id) && normalizeName(s.name) === nameNorm
-        )
+        inScope(s) && !phoneDupes.some(p => p.id === s.id) && normalizeName(s.name) === nameNorm
+      )
       : [];
     return { phone: phoneDupes, name: nameDupes };
   };
@@ -188,7 +188,7 @@ export const SubscriberFormModal: React.FC<SubscriberFormModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       title={isEditing ? 'تعديل بيانات المشترك' : 'إضافة مشترك جديد'}
-      description={isEditing ? 'تحديث البيانات الأساسية للمشترك' : 'إدخال مشترك جديد إلى المنظومة وتعيين اشتراكه'}
+      description={isEditing ? 'تحديث البيانات الأساسية للمشترك' : 'إدخال مشترك جديد إلى النظام وتعيين اشتراكه'}
       maxWidth="lg"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -233,8 +233,8 @@ export const SubscriberFormModal: React.FC<SubscriberFormModalProps> = ({
               type="button"
               onClick={() => handlePlanTypeChange('home')}
               className={`p-3 rounded-xl border text-start transition-all flex items-center gap-3 ${planType === 'home'
-                  ? 'bg-cyan-500/10 border-cyan-500 text-cyan-800 dark:text-cyan-200 shadow-sm'
-                  : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400'
+                ? 'bg-cyan-500/10 border-cyan-500 text-cyan-800 dark:text-cyan-200 shadow-sm'
+                : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400'
                 }`}
             >
               <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shrink-0">
@@ -252,8 +252,8 @@ export const SubscriberFormModal: React.FC<SubscriberFormModalProps> = ({
               type="button"
               onClick={() => handlePlanTypeChange('personal')}
               className={`p-3 rounded-xl border text-start transition-all flex items-center gap-3 ${planType === 'personal'
-                  ? 'bg-purple-500/15 border-purple-500 text-purple-800 dark:text-purple-200 shadow-sm'
-                  : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400'
+                ? 'bg-purple-500/15 border-purple-500 text-purple-800 dark:text-purple-200 shadow-sm'
+                : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400'
                 }`}
             >
               <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">

@@ -28,7 +28,7 @@ export const ALL_MODERATOR_PERMISSIONS: PermissionDefinition[] = [
   { key: 'subscribers_create', label: 'إضافة مشترك جديد', description: 'إضافة مشتركين جدد وتعيين باقاتهم واشتراكاتهم', group: 'المشتركون' },
   { key: 'subscribers_edit', label: 'تعديل بيانات المشترك', description: 'تعديل هواتف ومناطق وملاحظات المشتركين', group: 'المشتركون' },
   { key: 'subscribers_archive', label: 'أرشفة المشتركين', description: 'أرشفة المشترك أو استرجاعه من الأرشيف', group: 'المشتركون' },
-  { key: 'subscribers_delete', label: 'حذف المشترك نهائياً', description: 'حذف حساب المشترك وسجلاته نهائياً من المنظومة', group: 'المشتركون' },
+  { key: 'subscribers_delete', label: 'حذف المشترك نهائياً', description: 'حذف حساب المشترك وسجلاته نهائياً من النظام', group: 'المشتركون' },
   { key: 'subscriptions_renew', label: 'تجديد الاشتراكات', description: 'تجديد دورات الاشتراكات الشهرية وتعديل المدد', group: 'الاشتراكات' },
   { key: 'show_passwords', label: 'إظهار كلمات المرور', description: 'الاطلاع على كلمات مرور حسابات المشتركين بالشبكة', group: 'الاشتراكات' },
   { key: 'payments_view', label: 'عرض سجل الدفعات', description: 'الاطلاع على سندات القبض والدفعات المالية المسجلة', group: 'المالية' },
