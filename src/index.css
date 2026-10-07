@@ -1,0 +1,279 @@
+@import "tailwindcss";
+
+/* ================================================================
+   TAILWIND CSS v4 — DECOUPLE DARK MODE FROM SYSTEM / OS THEME
+   By default, Tailwind v4 uses @media (prefers-color-scheme: dark).
+   This @custom-variant overrides 'dark:' to STRICTLY use the .dark
+   class selector, making the app 100% independent of the OS/browser.
+   ================================================================ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  /* ── Brand: Sky Cyan-Blue ── */
+  --color-brand-50:  #f0f9ff;
+  --color-brand-100: #e0f2fe;
+  --color-brand-200: #bae6fd;
+  --color-brand-300: #7dd3fc;
+  --color-brand-400: #38bdf8;
+  --color-brand-500: #0ea5e9;
+  --color-brand-600: #0284c7;
+  --color-brand-700: #0369a1;
+  --color-brand-800: #075985;
+  --color-brand-900: #0c4a6e;
+
+  /* ── Emerald (Active / Paid) ── */
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+
+  /* ── Amber (Expiring / Partial) ── */
+  --color-amber-400:  #fbbf24;
+  --color-amber-500:  #f59e0b;
+  --color-amber-600:  #d97706;
+
+  /* ── Rose (Expired / Unpaid) ── */
+  --color-rose-400: #fb7185;
+  --color-rose-500: #f43f5e;
+  --color-rose-600: #e11d48;
+
+  /* ── Violet (Personal Plan) ── */
+  --color-violet-400: #a78bfa;
+  --color-violet-500: #8b5cf6;
+  --color-violet-600: #7c3aed;
+
+  /* ── Indigo (Owner / Admin Role) ── */
+  --color-indigo-400: #818cf8;
+  --color-indigo-500: #6366f1;
+  --color-indigo-600: #4f46e5;
+}
+
+/* ================================================================
+   SEMANTIC TOKENS & SYSTEM INDEPENDENCE
+   ================================================================ */
+:root {
+  --bg-app: #f1f5f9;
+  --bg-surface: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-subtle: #e2e8f0;
+}
+
+html.dark {
+  --bg-app: #07090e;
+  --bg-surface: #0d1325;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+    /* Prevent OS forced high-contrast color overrides */
+    forced-color-adjust: none;
+  }
+
+  /* ── Strict 0123456789 digits only across the whole app ── */
+  * {
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  /* ================================================================
+     DARK THEME — OLED Obsidian Black
+     Applied ONLY when html has .dark class
+     ================================================================ */
+  html.dark {
+    color-scheme: dark;
+    background-color: #07090e;
+    color: #f1f5f9;
+  }
+
+  html.dark body {
+    background-color: #07090e;
+    color: #f1f5f9;
+  }
+
+  /* ================================================================
+     LIGHT THEME — Apple Porcelain (Ivory & Clean Slate)
+     Applied when html does NOT have .dark class
+     ================================================================ */
+  html:not(.dark),
+  html.light-mode {
+    color-scheme: light;
+    background-color: #f1f5f9;
+    color: #0f172a;
+  }
+
+  html:not(.dark) body,
+  html.light-mode body {
+    background-color: #f1f5f9;
+    color: #0f172a;
+  }
+
+  /* Smooth transition between themes */
+  html, body {
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  /* ── Scrollbars — Fully isolated ── */
+  html.dark ::-webkit-scrollbar        { width: 5px; height: 5px; }
+  html.dark ::-webkit-scrollbar-track  { background: transparent; }
+  html.dark ::-webkit-scrollbar-thumb  { background: rgba(255,255,255,0.12); border-radius: 9999px; }
+  html.dark ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.24); }
+
+  html:not(.dark) ::-webkit-scrollbar        { width: 5px; height: 5px; }
+  html:not(.dark) ::-webkit-scrollbar-track  { background: transparent; }
+  html:not(.dark) ::-webkit-scrollbar-thumb  { background: rgba(15,23,42,0.18); border-radius: 9999px; }
+  html:not(.dark) ::-webkit-scrollbar-thumb:hover { background: rgba(15,23,42,0.32); }
+
+  /* ── Native Controls: Input / Select / Textarea / Autofill ── */
+  input, select, textarea, button {
+    font-family: inherit;
+  }
+
+  /* Prevent browser from rendering white option text in light mode or dark in dark mode */
+  html:not(.dark) select option {
+    background-color: #ffffff;
+    color: #0f172a;
+  }
+
+  html.dark select option {
+    background-color: #0c101d;
+    color: #f1f5f9;
+  }
+
+  /* WebKit Autofill immunity against OS dark mode overrides */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-text-fill-color: inherit;
+    transition: background-color 5000000s ease-in-out 0s;
+  }
+
+  html.dark input:-webkit-autofill,
+  html.dark input:-webkit-autofill:hover,
+  html.dark input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #f1f5f9 !important;
+    caret-color: #f1f5f9;
+  }
+
+  html:not(.dark) input:-webkit-autofill,
+  html:not(.dark) input:-webkit-autofill:hover,
+  html:not(.dark) input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #0f172a !important;
+    caret-color: #0f172a;
+  }
+
+  input[type="checkbox"], input[type="radio"] {
+    accent-color: #0ea5e9;
+  }
+}
+
+/* ================================================================
+   DARK THEME — Depth background accent on #root
+   ================================================================ */
+html.dark #root {
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse 65% 40% at 10% 0%,  rgba(14,165,233,0.05) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 90% 100%, rgba(139,92,246,0.04) 0%, transparent 55%);
+}
+
+/* ================================================================
+   LIGHT THEME — Depth background accent on #root
+   ================================================================ */
+html:not(.dark) #root {
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse 65% 40% at 10% 0%,  rgba(14,165,233,0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 90% 100%, rgba(139,92,246,0.04) 0%, transparent 55%);
+}
+
+/* ================================================================
+   GLASSMORPHISM — Dark OLED
+   ================================================================ */
+.dark .glass {
+  background: rgba(9, 13, 24, 0.88);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.dark .glass-card {
+  background: rgba(13, 19, 37, 0.80);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.065);
+  box-shadow:
+    0 8px 28px -4px rgba(0, 0, 0, 0.50),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.035);
+}
+
+.dark .glass-card-hover:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.13);
+  box-shadow:
+    0 18px 42px -6px rgba(0, 0, 0, 0.65),
+    0 0 22px 2px rgba(14, 165, 233, 0.09);
+}
+
+/* ================================================================
+   GLASSMORPHISM — Light Porcelain
+   ================================================================ */
+html:not(.dark) .glass {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04);
+}
+
+html:not(.dark) .glass-card {
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  box-shadow:
+    0 1px 3px 0 rgba(15, 23, 42, 0.04),
+    0 6px 18px -4px rgba(15, 23, 42, 0.03);
+}
+
+html:not(.dark) .glass-card-hover:hover {
+  transform: translateY(-2px);
+  border-color: rgba(14, 165, 233, 0.40);
+  box-shadow:
+    0 12px 32px -6px rgba(15, 23, 42, 0.08),
+    0 0 18px 2px rgba(14, 165, 233, 0.07);
+}
+
+.glass-card-hover {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ================================================================
+   PRINT — Clean paper receipts
+   ================================================================ */
+@media print {
+  html, body { background: #ffffff !important; color: #000 !important; }
+  #root       { background-image: none !important; }
+  .no-print   { display: none !important; }
+  .print-only { display: block !important; }
+
+  .receipt-printable {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}

@@ -1,0 +1,146 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ============================================================
+    // تجديد — نظام إدارة شبكة الإنترنت (Tajdeed ISP System)
+    // Production Cloud Firestore Security Rules (RBAC Enforced)
+    // ============================================================
+
+    // Basic Authentication checks
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Retrieve active user profile doc from /admins/{uid}
+    function getAdminDoc() {
+      return get(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // Check if user doc exists and account is active
+    function isActive() {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) &&
+        getAdminDoc().data.active == true;
+    }
+
+    // Check if user is Admin (full permissions)
+    function isAdmin() {
+      return isActive() && getAdminDoc().data.role == 'admin';
+    }
+
+    // Check if user has specific granular permission (Admin has all)
+    function hasPerm(permission) {
+      return isActive() && (
+        getAdminDoc().data.role == 'admin' || 
+        (
+          getAdminDoc().data.role == 'moderator' && 
+          permission in getAdminDoc().data.permissions
+        )
+      );
+    }
+
+    // ------------------------------------------------------------
+    // 1. Admins & Moderators collection
+    // ------------------------------------------------------------
+    match /admins/{adminId} {
+      // Authenticated users can read directory
+      allow read: if isAuthenticated();
+      
+      // Admin can create or update moderators.
+      // Initial Admin bootstrap allowed if user creates their own profile.
+      allow create: if isAdmin() || (isAuthenticated() && request.auth.uid == adminId);
+      // Anyone may only refresh their own last-login stamp.
+      allow update: if isAdmin() || (isAuthenticated() && request.auth.uid == adminId
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastLoginAt']));
+      allow delete: if isAdmin();
+    }
+
+    // ------------------------------------------------------------
+    // 2. Subscribers collection
+    // ------------------------------------------------------------
+    match /subscribers/{subscriberId} {
+      allow read: if hasPerm('subscribers_view');
+      allow create: if hasPerm('subscribers_create');
+      allow update: if hasPerm('subscribers_edit') || hasPerm('subscribers_archive');
+      allow delete: if isAdmin() || hasPerm('subscribers_delete');
+    }
+
+    // ------------------------------------------------------------
+    // 3. Subscriptions (cycles) collection
+    // ------------------------------------------------------------
+    match /subscriptions/{subscriptionId} {
+      allow read: if hasPerm('subscribers_view');
+      allow create: if hasPerm('subscribers_create') || hasPerm('subscriptions_renew');
+      // Cashiers recording payments only touch the balance fields.
+      allow update: if isAdmin() || hasPerm('subscriptions_renew')
+        || (hasPerm('payments_create')
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['paidAmount', 'payStatus']));
+      allow delete: if isAdmin() || hasPerm('subscribers_delete');
+    }
+
+    // ------------------------------------------------------------
+    // 4. Payments collection
+    // ------------------------------------------------------------
+    match /payments/{paymentId} {
+      allow read: if hasPerm('payments_view');
+      allow create: if hasPerm('payments_create');
+      // Mirrors the app: holders of payments_create record, correct and remove receipts.
+      allow update: if isAdmin() || hasPerm('payments_create');
+      allow delete: if isAdmin() || hasPerm('subscribers_delete') || hasPerm('payments_create');
+    }
+
+    // ------------------------------------------------------------
+    // 5. Audit logs — Immutable append-only
+    // ------------------------------------------------------------
+    match /auditLogs/{logId} {
+      allow read: if hasPerm('audit_view');
+      allow create: if isActive();
+      allow update, delete: if false;
+    }
+
+    // ------------------------------------------------------------
+    // 6. Settings collection (everyone reads operational settings; only admin writes)
+    // ------------------------------------------------------------
+    match /settings/{docId} {
+      allow read: if isActive();
+      allow write: if isAdmin();
+    }
+
+    // ------------------------------------------------------------
+    // 7. Cloud backups (+ chunked payloads) — periodic & manual
+    // ------------------------------------------------------------
+    match /backups/{backupId} {
+      // Listing needs the export permission; creation runs on any active device.
+      allow read: if hasPerm('reports_export');
+      allow create: if isActive();
+      allow update: if false;
+      allow delete: if isAdmin();
+
+      match /chunks/{chunkId} {
+        allow read: if hasPerm('reports_export');
+        allow create: if isActive();
+        allow update: if false;
+        allow delete: if isAdmin();
+      }
+    }
+
+    // ------------------------------------------------------------
+    // 8. Counters (yearly receipt numbers) — any active staff may advance
+    // ------------------------------------------------------------
+    match /counters/{counterId} {
+      allow read: if isActive();
+      allow create, update: if isActive();
+      allow delete: if isAdmin();
+    }
+
+    // ------------------------------------------------------------
+    // 9. Sessions (login history) — staff open their own, admin reads
+    // ------------------------------------------------------------
+    match /sessions/{sessionId} {
+      allow read: if isAdmin();
+      allow create: if isActive();
+      allow update: if isActive() && request.auth.uid == resource.data.uid;
+      allow delete: if isAdmin();
+    }
+  }
+}

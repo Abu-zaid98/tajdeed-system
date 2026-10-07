@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="50%" stop-color="#0ea5e9" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="100%" stop-color="#030712" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)" />
+  <circle cx="256" cy="256" r="230" stroke="url(#brandGrad)" stroke-width="4" stroke-opacity="0.2" fill="none" />
+  <!-- Renewal Circular Arrow -->
+  <path d="M 120 220 A 150 150 0 1 1 200 390" stroke="url(#brandGrad)" stroke-width="28" stroke-linecap="round" fill="none" />
+  <polygon points="120,180 80,240 160,240" fill="#38bdf8" />
+  <!-- Central Signal Tower / Dot -->
+  <circle cx="256" cy="280" r="24" fill="#38bdf8" />
+  <path d="M 210 230 A 65 65 0 0 1 302 230" stroke="#38bdf8" stroke-width="20" stroke-linecap="round" fill="none" />
+  <path d="M 175 185 A 115 115 0 0 1 337 185" stroke="#0ea5e9" stroke-width="20" stroke-linecap="round" fill="none" />
+</svg>

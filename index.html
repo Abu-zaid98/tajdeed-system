@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ar" dir="rtl" class="dark" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <title>تجديد — نظام إدارة اشتراكات شبكة الإنترنت</title>
+    <meta name="description" content="نظام ويب متقدم وفائق السرعة لإدارة مشتركي شبكات الإنترنت، تجديد الاشتراكات، ومتابعة الدفعات والسجلات." />
+    <meta name="theme-color" content="#06080d" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="تجديد" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!--
+      ANTI-FLASH SCRIPT — runs synchronously before React loads.
+      Reads saved theme and applies it immediately so the user
+      NEVER sees a flash of wrong theme on page load.
+      This also OVERRIDES any OS/browser prefers-color-scheme.
+    -->
+    <script>
+      (function () {
+        var saved = localStorage.getItem('tajdeed_theme');
+        // Default is ALWAYS dark unless user explicitly chose light
+        var theme = saved === 'light' ? 'light' : 'dark';
+        var root = document.documentElement;
+
+        if (theme === 'dark') {
+          root.classList.add('dark');
+          root.classList.remove('light-mode');
+          root.setAttribute('data-theme', 'dark');
+          root.style.colorScheme = 'dark';
+          root.style.backgroundColor = '#07090e';
+        } else {
+          root.classList.remove('dark');
+          root.classList.add('light-mode');
+          root.setAttribute('data-theme', 'light');
+          root.style.colorScheme = 'light';
+          root.style.backgroundColor = '#f1f5f9';
+        }
+
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) {
+          meta.setAttribute('content', theme === 'dark' ? '#07090e' : '#f1f5f9');
+        }
+      })();
+    </script>
+  </head>
+  <body class="antialiased min-h-screen">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
