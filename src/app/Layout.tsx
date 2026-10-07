@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Wifi,
   Layers,
@@ -23,6 +23,8 @@ import {
 } from 'lucide-react';
 import { useAppStore } from '../lib/store';
 import { formatArabicDate } from '../lib/dates';
+import { format } from 'date-fns';
+import { arSA } from 'date-fns/locale';
 import { useTheme } from '../hooks/useTheme';
 import { Badge } from '../components/ui/Badge';
 import { ConfirmModal } from '../components/ui/ConfirmModal';
@@ -35,6 +37,25 @@ interface LayoutProps {
   onLogout: () => void;
   children: React.ReactNode;
 }
+
+/** Self-updating date + time pill (isolated state so only it re-renders). */
+const NavbarDateTime: React.FC<{ className?: string }> = ({ className = '' }) => {
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(new Date()), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  return (
+    <div className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/10 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap ${className}`}>
+      <CalendarDays className="w-3.5 h-3.5 text-brand-500 shrink-0" />
+      <span>{formatArabicDate(now, 'EEEE، d MMMM yyyy')}</span>
+      <span className="text-slate-300 dark:text-slate-600">•</span>
+      <span>{format(now, 'hh:mm:ss a', { locale: arSA })}</span>
+    </div>
+  );
+};
 
 export const Layout: React.FC<LayoutProps> = ({
   currentTab,
@@ -192,11 +213,8 @@ export const Layout: React.FC<LayoutProps> = ({
             </div>
           </div>
 
-          {/* Center: Day & Date (readable in light & dark modes) */}
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/10 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap">
-            <CalendarDays className="w-3.5 h-3.5 text-brand-500 shrink-0" />
-            <span>{formatArabicDate(new Date(), 'EEEE، d MMMM yyyy')}</span>
-          </div>
+          {/* Center: Day, Date & Live Time (desktop — mobile gets its own bar below) */}
+          <NavbarDateTime className="hidden sm:flex" />
 
           {/* Right: Actions */}
           <div className="flex items-center gap-1.5 sm:gap-2">
@@ -264,6 +282,11 @@ export const Layout: React.FC<LayoutProps> = ({
             </button>
           </div>
         </header>
+
+        {/* Mobile date & time bar (header is too crowded on phones) */}
+        <div className="sm:hidden px-4 pt-3 flex justify-center">
+          <NavbarDateTime />
+        </div>
 
         {/* ── PAGE CONTENT ── */}
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto pb-24 lg:pb-8">
