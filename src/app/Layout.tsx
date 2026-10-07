@@ -18,6 +18,7 @@ import {
   CalendarDays,
   Send,
   MessageCircle,
+  RefreshCw,
   Users
 } from 'lucide-react';
 import { useAppStore } from '../lib/store';
@@ -227,6 +228,15 @@ export const Layout: React.FC<LayoutProps> = ({
                 <span className="hidden sm:inline">متصل ومزامن</span>
               </div>
             )}
+
+            {/* Reload */}
+            <button
+              onClick={() => window.location.reload()}
+              className="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/[0.07] hover:text-slate-900 dark:hover:text-white transition-colors"
+              title="إعادة تحميل الصفحة"
+            >
+              <RefreshCw className="w-4 h-4" />
+            </button>
 
             {/* Theme Toggle */}
             <button

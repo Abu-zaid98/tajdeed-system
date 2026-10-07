@@ -58,9 +58,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const canAddSubscriber = hasPermission('subscribers_create');
   const canBrowseSubscribers = hasPermission('subscribers_view');
 
-  // Smart greeting
+  // Smart greeting (morning until noon, evening after)
   const hour = new Date().getHours();
-  const greeting = hour >= 5 && hour < 12 ? 'صباح الخير' : hour >= 12 && hour < 18 ? 'نهارك سعيد' : 'مساء الخير';
+  const greeting = hour >= 5 && hour < 12 ? 'صباح الخير' : 'مساء الخير';
   const firstName = currentAdmin?.name?.split(' ')[0] || '';
 
   // Compute stats
