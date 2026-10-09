@@ -61,7 +61,10 @@ service cloud.firestore {
     match /subscribers/{subscriberId} {
       allow read: if hasPerm('subscribers_view');
       allow create: if hasPerm('subscribers_create');
-      allow update: if hasPerm('subscribers_edit') || hasPerm('subscribers_archive');
+      allow update: if hasPerm('subscribers_edit') || hasPerm('subscribers_archive')
+        // Cashiers booking an overpayment only touch the credit balance.
+        || (hasPerm('payments_create')
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['creditBalance']));
       allow delete: if isAdmin() || hasPerm('subscribers_delete');
     }
 

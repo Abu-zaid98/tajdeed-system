@@ -16,6 +16,7 @@ import { formatCurrency, exportToCsv } from '../../lib/utils';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { ConfirmModal } from '../../components/ui/ConfirmModal';
+import { toast } from 'sonner';
 import type { Payment, Subscription } from '../../types';
 
 interface PaymentsViewProps {
@@ -88,6 +89,10 @@ export const PaymentsView: React.FC<PaymentsViewProps> = ({ onViewReceipt }) => 
   };
 
   const saveEdit = async (paymentId: string) => {
+    if (!(editAmount > 0)) {
+      toast.error('مبلغ الدفعة يجب أن يكون أكبر من صفر');
+      return;
+    }
     await updatePayment(paymentId, { amount: editAmount, note: editNote }, editBase ? { base: editBase } : undefined);
     setEditingId(null);
     setEditBase(null);
@@ -209,7 +214,7 @@ export const PaymentsView: React.FC<PaymentsViewProps> = ({ onViewReceipt }) => 
                           value={editAmount}
                           onChange={e => setEditAmount(Number(e.target.value))}
                           className="w-28 rounded-lg border border-brand-500/50 bg-white dark:bg-slate-900 text-slate-900 dark:text-white px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500/30 font-bold"
-                          min={0}
+                          min={1}
                           autoFocus
                         />
                       ) : (

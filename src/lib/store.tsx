@@ -1583,34 +1583,43 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     setPayments(prev => [newPayment, ...prev]);
 
-    const newPaidAmount = targetCycle.paidAmount + params.amount;
-    let newPayStatus: PayStatus = 'unpaid';
-    if (newPaidAmount >= targetCycle.price) {
-      newPayStatus = 'paid';
-    } else if (newPaidAmount > 0) {
-      newPayStatus = 'partial';
-    }
-
-    const updatedCycle = { ...targetCycle, paidAmount: newPaidAmount, payStatus: newPayStatus };
+    const newPaidTotal = targetCycle.paidAmount + params.amount;
+    // Overpayment becomes explicit credit instead of inflating paidAmount.
+    const balance = computePlanChangeBalance(newPaidTotal, targetCycle.price);
+    const updatedCycle = { ...targetCycle, paidAmount: balance.cyclePaid, payStatus: balance.payStatus };
 
     setSubscriptions(prev =>
       prev.map(s => (s.id === params.subscriptionId ? updatedCycle : s))
     );
 
+    const paymentWrites: Promise<unknown>[] = [];
     if (db) {
+      paymentWrites.push(trackWrite(setDoc(doc(db, 'payments', paymentId), cleanForFirestore(newPayment))));
+      paymentWrites.push(trackWrite(setDoc(doc(db, 'subscriptions', params.subscriptionId), cleanForFirestore(updatedCycle), { merge: true })));
+    }
+    if (balance.creditAdd > 0) {
+      const updatedSub: Subscriber = { ...sub, creditBalance: (sub.creditBalance || 0) + balance.creditAdd };
+      setSubscribers(prev => prev.map(s => (s.id === params.subscriberId ? updatedSub : s)));
+      if (db) {
+        paymentWrites.push(trackWrite(setDoc(doc(db, 'subscribers', params.subscriberId), cleanForFirestore(updatedSub), { merge: true })));
+      }
+    }
+
+    if (paymentWrites.length > 0) {
       confirmWrite(
-        Promise.all([
-          trackWrite(setDoc(doc(db, 'payments', paymentId), cleanForFirestore(newPayment))),
-          trackWrite(setDoc(doc(db, 'subscriptions', params.subscriptionId), cleanForFirestore(updatedCycle), { merge: true }))
-        ]),
-        'تم تسجيل الدفعة وحفظ السند في قاعدة البيانات'
+        Promise.all(paymentWrites),
+        balance.creditAdd > 0
+          ? `تم تسجيل الدفعة — فائض ${balance.creditAdd.toLocaleString('en-US')} ${settings.currency} رُحّل كرصيد دائن`
+          : 'تم تسجيل الدفعة وحفظ السند في قاعدة البيانات'
       );
     } else {
       toast.success('تم تسجيل الدفعة محلياً');
     }
 
     logAuditAction({
-      action: `استلام دفعة بقيمة ${params.amount.toLocaleString('en-US')} ${settings.currency} من ${sub.name}`,
+      action: balance.creditAdd > 0
+        ? `استلام دفعة بقيمة ${params.amount.toLocaleString('en-US')} ${settings.currency} من ${sub.name} (فائض ${balance.creditAdd.toLocaleString('en-US')} رُحّل دائناً)`
+        : `استلام دفعة بقيمة ${params.amount.toLocaleString('en-US')} ${settings.currency} من ${sub.name}`,
       entity: 'payment',
       entityId: paymentId,
       entityName: sub.name,

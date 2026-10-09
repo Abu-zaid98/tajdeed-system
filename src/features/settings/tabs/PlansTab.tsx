@@ -64,6 +64,7 @@ export const PlansTab: React.FC<PlansTabProps> = ({ settings, isAdmin, updateSet
           onChange={e => setDefaultDurationDays(Number(e.target.value))}
           disabled={!isAdmin}
           startIcon={<Clock className="w-4 h-4" />}
+          min={1}
           required
         />
         <Input
@@ -74,6 +75,7 @@ export const PlansTab: React.FC<PlansTabProps> = ({ settings, isAdmin, updateSet
           disabled={!isAdmin}
           startIcon={<Bell className="w-4 h-4" />}
           helperText="المدة التي يتحول عندها الاشتراك لحالة (ينتهي قريباً)"
+          min={1}
           required
         />
       </div>
@@ -94,6 +96,7 @@ export const PlansTab: React.FC<PlansTabProps> = ({ settings, isAdmin, updateSet
             onChange={e => setHomePrice(Number(e.target.value))}
             disabled={!isAdmin}
             startIcon={<DollarSign className="w-4 h-4" />}
+            min={0}
           />
         </div>
 
@@ -112,6 +115,7 @@ export const PlansTab: React.FC<PlansTabProps> = ({ settings, isAdmin, updateSet
             onChange={e => setPersonalPrice(Number(e.target.value))}
             disabled={!isAdmin}
             startIcon={<DollarSign className="w-4 h-4" />}
+            min={0}
           />
         </div>
       </div>

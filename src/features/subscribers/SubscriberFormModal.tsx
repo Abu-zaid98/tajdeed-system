@@ -313,6 +313,7 @@ export const SubscriberFormModal: React.FC<SubscriberFormModalProps> = ({
                     value={price}
                     onChange={e => setPrice(Number(e.target.value))}
                     startIcon={<DollarSign className="w-4 h-4" />}
+                    min={0}
                     required={includeCycle}
                   />
                   <Input
@@ -321,6 +322,7 @@ export const SubscriberFormModal: React.FC<SubscriberFormModalProps> = ({
                     value={paidAmount}
                     onChange={e => setPaidAmount(Number(e.target.value))}
                     startIcon={<DollarSign className="w-4 h-4" />}
+                    min={0}
                     helperText={paidAmount >= price ? 'مدفوع بالكامل' : paidAmount > 0 ? 'دفعة جزئية' : 'غير مدفوع (ذمة)'}
                   />
                 </div>

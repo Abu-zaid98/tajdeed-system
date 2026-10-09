@@ -103,6 +103,7 @@ export const ChangePlanModal: React.FC<ChangePlanModalProps> = ({
           onChange={e => setPrice(Number(e.target.value))}
           startIcon={<DollarSign className="w-4 h-4" />}
           helperText={`العملة: ${settings.currency} — يُعاد حساب حالة الدفع من المدفوع (${formatCurrency(paid, settings.currency)})`}
+          min={0}
           required
         />
 

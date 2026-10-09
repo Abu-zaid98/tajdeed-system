@@ -122,11 +122,10 @@ export const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
                 setAmount(remainingBalance);
                 setIsFullPayment(true);
               }}
-              className={`py-2 px-3 rounded-xl text-xs font-semibold border flex items-center justify-center gap-1.5 transition-all ${
-                isFullPayment
+              className={`py-2 px-3 rounded-xl text-xs font-semibold border flex items-center justify-center gap-1.5 transition-all ${isFullPayment
                   ? 'bg-emerald-500 text-white border-emerald-500 shadow-md'
                   : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-emerald-500/40'
-              }`}
+                }`}
             >
               <CheckCircle2 className="w-3.5 h-3.5" />
               <span>سداد كامل ({remainingBalance.toLocaleString('en-US')})</span>
@@ -137,11 +136,10 @@ export const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
                 setIsFullPayment(false);
                 setAmount(Math.round(remainingBalance / 2));
               }}
-              className={`py-2 px-3 rounded-xl text-xs font-semibold border flex items-center justify-center gap-1.5 transition-all ${
-                !isFullPayment
+              className={`py-2 px-3 rounded-xl text-xs font-semibold border flex items-center justify-center gap-1.5 transition-all ${!isFullPayment
                   ? 'bg-amber-500 text-white border-amber-500 shadow-md'
                   : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-amber-500/40'
-              }`}
+                }`}
             >
               <span>دفعة جزئية (يدوي)</span>
             </button>
@@ -160,15 +158,20 @@ export const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
           startIcon={<DollarSign className="w-4 h-4" />}
           helperText={`المتبقي بعد هذه الدفعة: ${formatCurrency(Math.max(0, remainingBalance - amount), settings.currency)}`}
           required
-          min={100}
+          min={1}
         />
+        {Math.max(0, amount - remainingBalance) > 0 && (
+          <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+            فائض {formatCurrency(Math.max(0, amount - remainingBalance), settings.currency)} سيُرحّل تلقائياً كرصيد دائن للمشترك
+          </div>
+        )}
 
         {/* Note */}
         <Input
           label="ملاحظة الدفعة (اختياري)"
           value={note}
           onChange={e => setNote(e.target.value)}
-          placeholder="مثال: نقداً، زين كاش، تحويل، رقم إيصال يدوي..."
+          placeholder="مثال: نقداً، تحويل، رقم إيصال يدوي..."
         />
 
         {/* Submitter info */}
